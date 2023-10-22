@@ -3,9 +3,13 @@ import json
 import pandas as pd
 from sqlalchemy import create_engine
 import execjs
+import matplotlib.pyplot as plt
+import time
 
 #some variables
 judge_state_dict={0:'QUEUEING',1:'AC',2:'TLE',3:'MLE',4:'RE',5:'SE',6:'WA',7:'FE',8:'CE',9:'OLE',10:'CANCELED'}
+titles=['QUEUEING','AC','TLE','MLE','RE','SE','WA','PE','CE','OLE','CANCELED']
+colors=['#9b9b9b','#7ed321','#4a90e2','#9013fe','#bd10e0','#000000','#d0021b','#f8e71c','#f5a623','#8b572a','#4a4a4a']
 
 #some functions
 def transfer_time(t):
@@ -63,3 +67,29 @@ most_ac_dataframe.to_excel('Mostly_AC.xlsx',index=False)
 most_ac_dataframe.to_sql('most_ac_data',engine,if_exists='replace',index=False)
 most_submit_dataframe.to_excel('Mostly_Submitted.xlsx',index=False)
 most_submit_dataframe.to_sql('most_submitted_data',engine,if_exists='replace',index=False)
+
+#extra_analyze
+for index,row in problem_analyze_dataframe.iterrows():
+    problem_id=row['题目代码']
+    problem_analyze_request=requests.get('https://oj.qd.sdu.edu.cn/api/submit/list?pageNow=1&pageSize=1000&problemCode='+str(problem_id))
+    problem_analyze_json=json.loads(problem_analyze_request.text)
+    problem_single_dataframe=pd.DataFrame(problem_analyze_json['data']['rows'])
+    results=[0,0,0,0,0,0,0,0,0,0,0]
+    for i2,row2 in problem_single_dataframe.iterrows():
+        if(row2['judgeResult']>10):
+            continue
+        results[row2['judgeResult']]+=1
+    res_to_plot=[]
+    tit_to_plot=[]
+    col_to_plot=[]
+    for i in range(11):
+        if(results[i]!=0):
+            res_to_plot.append(results[i])
+            tit_to_plot.append(titles[i])
+            col_to_plot.append(colors[i])
+    plt.pie(res_to_plot,labels=tit_to_plot,colors=col_to_plot, autopct=lambda p: '{:.1f}%'.format(round(p)) if p >= 0.1 else '')
+    plt.title(problem_id)
+    plt.savefig('./data/pics/'+str(problem_id)+'.jpg')
+    time.sleep(1)
+    #plt.show()
+    plt.close()
