@@ -18,7 +18,7 @@ def transfer_time(t):
 
 #get data
 problem_request=requests.get("https://oj.qd.sdu.edu.cn/api/problem/list?pageNow=1&pageSize=200")
-ac_request=requests.get("https://oj.qd.sdu.edu.cn/api/submit/list?pageNow=1&pageSize=200") #https://oj.qd.sdu.edu.cn/api/submit/list?pageNow=1&pageSize=2000
+ac_request=requests.get("https://oj.qd.sdu.edu.cn/api/submit/list?pageNow=1&pageSize=2000") #https://oj.qd.sdu.edu.cn/api/submit/list?pageNow=1&pageSize=2000
 problem_json=json.loads(problem_request.text)
 ac_json=json.loads(ac_request.text)
 
