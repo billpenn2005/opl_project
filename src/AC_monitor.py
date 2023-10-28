@@ -63,6 +63,23 @@ def get_time():
     s='new Date().getTime()'
     return execjs.eval(s)
 
+#sql
+pwd=open('./data/sql_login.txt')
+sql_username=pwd.readline()
+sql_username=sql_username.rstrip('\n')
+sql_password=pwd.readline()
+sql_password=sql_password.rstrip('\n')
+host=pwd.readline()
+host=host.rstrip('\n')
+dbname=pwd.readline()
+dbname=dbname.rstrip('\n')
+port=pwd.readline()
+port=port.rstrip('\n')
+pwd.close()
+DB_URI = 'mysql+pymysql://{username}:{pwd}@{host}:{port}/{db}?charset=utf8'\
+    .format(username =sql_username,pwd = sql_password,host = host,port=port,db = dbname)
+engine = create_engine(DB_URI, paramstyle="format")
+
 def get_group_submits(group_num):
     contests_dataframe=pd.DataFrame(json.loads(requests.get("https://oj.qd.sdu.edu.cn/api/contest/list?pageNow=1&pageSize=200&groupId="+str(group_num),cookies=cookies_dict).text)['data']['rows'])
     contests_num=[]
@@ -83,6 +100,7 @@ while(True):
     send_text=''
     print(transfer_time(str(now_time))+' Starting to analyze...')
     all_submits=get_group_submits(49)
+    all_submits.to_sql('group_submits',engine,if_exists='append',index=False)
     for index,row in all_submits.iterrows():
         if(row['gmtCreate']<str(now_time)):
             continue
@@ -92,6 +110,9 @@ while(True):
                 send_text+=row1['nickname']+' AC '+row['problemTitle']+' at '+transfer_time(str(int(row['gmtCreate'])+8*(3600000)))[:-3]+'\n'
                 break
     print(send_text)
-    server.send_mail(to_mail,{'subject':'AC monitor','content_text':send_text})
+    if(send_text!=''):
+        server.send_mail(to_mail,{'subject':'AC monitor','content_text':send_text})
+    else:
+        print("No one AC in these 15 minutes.")
     now_time=get_time()
     time.sleep(15*60) #wait 15 minutes
