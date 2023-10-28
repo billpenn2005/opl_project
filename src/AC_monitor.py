@@ -13,6 +13,7 @@ from sqlalchemy import create_engine
 import execjs
 import matplotlib.pyplot as plt
 import zmail
+import pytz
 
 #some variables
 judge_state_dict={0:'QUEUEING',1:'AC',2:'TLE',3:'MLE',4:'RE',5:'SE',6:'WA',7:'FE',8:'CE',9:'OLE',10:'CANCELED'}
@@ -88,9 +89,9 @@ while(True):
         if(row['judgeResult']==1):
             filt_df=group_members[group_members['username']==row['username']]
             for index1,row1 in filt_df.iterrows():
-                send_text+=row1['nickname']+' AC '+row['problemTitle']+' at '+transfer_time(row['gmtCreate'])+'\n'
+                send_text+=row1['nickname']+' AC '+row['problemTitle']+' at '+transfer_time(str(int(row['gmtCreate'])+8*(3600000)))[:-3]+'\n'
                 break
     print(send_text)
     server.send_mail(to_mail,{'subject':'AC monitor','content_text':send_text})
     now_time=get_time()
-    time.sleep(30*60) #wait 30 minutes
+    time.sleep(15*60) #wait 15 minutes
