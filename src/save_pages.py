@@ -5,7 +5,14 @@ from selenium.webdriver.support.wait import WebDriverWait
 import pandas as pd
 from sqlalchemy import create_engine
 import base64
+import os
 
+def mkdir(path):
+	folder = os.path.exists(path)
+	if not folder:
+		os.makedirs(path)
+mkdir('./data')
+mkdir('./data/pdfs')
 
 #sql
 pwd=open('./data/sql_login.txt')
