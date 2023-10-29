@@ -1,9 +1,9 @@
 # Openlab复试Q3 看看你的
 * ## 环境
-  * python3.11
+  * Python 3.11
   * requirements.txt内容
-  * chrome
-  * MySQL8.0
+  * Chrome
+  * MySQL 8.0
 * ## 3.1 贪心的小 Q
   * 程序名称：greedy_Q.py
   * 需要的文件：
