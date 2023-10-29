@@ -92,7 +92,7 @@ group_members=pd.DataFrame(json.loads(requests.get('https://oj.qd.sdu.edu.cn/api
 now_time=0
 while(True):
     send_text=''
-    print(transfer_time(str(now_time))+' Starting to analyze...')
+    print(transfer_time(str(get_time()+8*(3600000)))[:-3]+' Starting to analyze...')
     all_submits=get_group_submits(49)
     all_submits.to_sql('group_submits',engine,if_exists='append',index=False)
     for index,row in all_submits.iterrows():
