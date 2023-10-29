@@ -43,5 +43,5 @@
   * 完成的功能：
     * 爬取通知及页面pdf(pdf保存在data/pdfs)
     * 数据存储到数据库
-* ## 获取爬取数据
+* ## 获取爬取的数据
   * 网盘：https://cloud.189.cn/web/share?code=JfUru2jQ3eQf（访问码：4xik）
