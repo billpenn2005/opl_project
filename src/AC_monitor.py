@@ -1,19 +1,13 @@
 from selenium import webdriver
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.remote.remote_connection import LOGGER
-from datetime import datetime
-import os
 import time
 import requests
 import json
 import pandas as pd
 from sqlalchemy import create_engine
 import execjs
-import matplotlib.pyplot as plt
 import zmail
-import pytz
 
 #some variables
 judge_state_dict={0:'QUEUEING',1:'AC',2:'TLE',3:'MLE',4:'RE',5:'SE',6:'WA',7:'FE',8:'CE',9:'OLE',10:'CANCELED'}

@@ -1,0 +1,9 @@
+pandas
+requests
+selenium
+sqlalchemy
+base64
+zmail
+execjs
+json
+matplotlib

@@ -1,16 +1,11 @@
 from selenium import webdriver
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.remote.remote_connection import LOGGER
-import re
-import os
 import time
 import requests
 import json
 import pandas as pd
 from sqlalchemy import create_engine
-import execjs
 import matplotlib.pyplot as plt
 
 #some variables
