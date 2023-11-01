@@ -7,6 +7,8 @@ from sqlalchemy import create_engine
 import base64
 import os
 
+#Retested on 2023/11/1, passed.
+
 def mkdir(path):
 	folder = os.path.exists(path)
 	if not folder:
@@ -36,12 +38,12 @@ chrome_options=Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('log-level=3')
 driver=webdriver.Chrome(options=chrome_options)
+driver.implicitly_wait(10)
 driver.get('https://www.bkjx.sdu.edu.cn/sanji_list.jsp?PAGENUM=1&wbtreeid=1010')
 total=int(driver.find_element(By.XPATH,'//*[@id="fanye128813"]').text[-4:-1])
 dts=[]
 for i in range(1,total):
     driver.get('https://www.bkjx.sdu.edu.cn/sanji_list.jsp?PAGENUM='+str(i)+'&wbtreeid=1010')
-    wait = WebDriverWait(driver, timeout=10, poll_frequency=1)
     links=driver.find_elements(By.CLASS_NAME,'leftNews3')
     for j in links:
         lks=j.find_element(By.TAG_NAME,'a')
@@ -57,7 +59,6 @@ df.to_excel('Notice_Data.xlsx',index=False)
 for index,row in df.iterrows():
     link=row['链接']
     driver.get(link)
-    wait = WebDriverWait(driver, timeout=10, poll_frequency=1)
     b64_str=driver.print_page()
     b64_bytes=base64.b64decode(b64_str)
     pathstr=row['标题']+row['时间']+'.pdf'

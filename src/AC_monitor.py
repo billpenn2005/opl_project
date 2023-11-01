@@ -9,6 +9,8 @@ from sqlalchemy import create_engine
 import execjs
 import zmail
 
+#Retested on 2023/11/1, passed.
+
 #some variables
 judge_state_dict={0:'QUEUEING',1:'AC',2:'TLE',3:'MLE',4:'RE',5:'SE',6:'WA',7:'PE',8:'CE',9:'OLE',10:'CANCELED'}
 titles=['QUEUEING','AC','TLE','MLE','RE','SE','WA','PE','CE','OLE','CANCELED']

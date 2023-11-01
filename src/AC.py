@@ -9,6 +9,8 @@ from sqlalchemy import create_engine
 import matplotlib.pyplot as plt
 import os
 
+#Retested on 2023/11/1, found problem that the program would error when user finished all the problems, fixed.
+
 def mkdir(path):
 	folder = os.path.exists(path)
 	if not folder:
@@ -145,9 +147,12 @@ for i in contest_ids:
     for j in range(11):
         tot_count[j]+=tot_res[j]
     not_ac_problems.append(pd.DataFrame(my_not_ac_problems))
-nac_df=pd.concat(not_ac_problems)
-nac_df.to_sql('unfinished_problems',engine,if_exists='replace',index=False)
-nac_df.to_excel('Unfinished_Problems.xlsx',index=False)
+if(len(not_ac_problems)):
+    print("You have finished all the problems.")
+else:
+    nac_df=pd.concat(not_ac_problems)
+    nac_df.to_sql('unfinished_problems',engine,if_exists='replace',index=False)
+    nac_df.to_excel('Unfinished_Problems.xlsx',index=False)
 group_df=get_group_submits(49)
 group_df.to_sql('group_submits',engine,index=False,if_exists='replace')
 group_df.to_excel('Group_Submits.xlsx',index=False)
