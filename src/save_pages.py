@@ -66,7 +66,7 @@ for index,row in df.iterrows():
     driver.get(link)
     b64_str=driver.print_page()
     b64_bytes=base64.b64decode(b64_str)
-    pathstr=row['标题']+row['时间']+'.pdf'
+    pathstr=row['标题']+row['时间']+row['爬取时间']+'.pdf'
     pathstr=pathstr.replace('/','')
     pathstr=pathstr.replace('\\','')
     pathstr=pathstr.replace(':','')
