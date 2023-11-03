@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions  import TimeoutException
 import pandas as pd
 from sqlalchemy import create_engine
 import base64
@@ -9,6 +9,7 @@ import os
 import execjs
 
 #Retested on 2023/11/1, passed.
+#Regenerated data on 2023/11/3.
 
 def mkdir(path):
 	folder = os.path.exists(path)
@@ -17,6 +18,9 @@ def mkdir(path):
 mkdir('./data')
 mkdir('./data/pdfs')
 
+def transfer_time(t):
+    s='(new Date('+t+')).toGMTString()'
+    return execjs.eval(s)
 def get_time():
     s='new Date().getTime()'
     return execjs.eval(s)
@@ -55,7 +59,7 @@ for i in range(1,total):
         elm=j.find_element(By.XPATH,'div[3]').text
         lnk=lks.get_property('href')
         lkt=lks.text
-        new_row={'标题':lkt,'时间':elm[1:-1],'链接':lnk,'爬取时间':get_time()}
+        new_row={'标题':lkt,'时间':elm[1:-1],'链接':lnk,'爬取时间':transfer_time(str(get_time()))}
         dts.append(new_row)
 df=pd.DataFrame(dts)
 df.to_sql('notice_data',engine,if_exists='replace',index=True)
@@ -63,7 +67,11 @@ df.to_excel('Notice_Data.xlsx',index=False)
 
 for index,row in df.iterrows():
     link=row['链接']
-    driver.get(link)
+    try:
+        driver.get(link)
+    except TimeoutException:
+        print('timeout, link:'+link)
+        continue
     b64_str=driver.print_page()
     b64_bytes=base64.b64decode(b64_str)
     pathstr=row['标题']+row['时间']+row['爬取时间']+'.pdf'
