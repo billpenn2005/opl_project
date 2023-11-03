@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions  import TimeoutException
+from selenium.common.exceptions import WebDriverException
 import pandas as pd
 from sqlalchemy import create_engine
 import base64
@@ -9,6 +10,7 @@ import os
 import execjs
 
 #Retested on 2023/11/1, passed.
+#Fixed WebDriverException.
 #Regenerated data on 2023/11/3.
 
 def mkdir(path):
@@ -70,8 +72,11 @@ for index,row in df.iterrows():
     try:
         driver.get(link)
     except TimeoutException:
-        print('timeout, link:'+link)
+        print('Timeout, link:'+link)
         continue
+    except WebDriverException:
+         print('Unknown exception, link:'+link)
+         continue
     b64_str=driver.print_page()
     b64_bytes=base64.b64decode(b64_str)
     pathstr=row['标题']+row['时间']+row['爬取时间']+'.pdf'
