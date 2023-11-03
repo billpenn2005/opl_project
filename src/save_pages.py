@@ -6,6 +6,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import base64
 import os
+import execjs
 
 #Retested on 2023/11/1, passed.
 
@@ -15,6 +16,10 @@ def mkdir(path):
 		os.makedirs(path)
 mkdir('./data')
 mkdir('./data/pdfs')
+
+def get_time():
+    s='new Date().getTime()'
+    return execjs.eval(s)
 
 #sql
 pwd=open('./data/sql_login.txt')
@@ -50,7 +55,7 @@ for i in range(1,total):
         elm=j.find_element(By.XPATH,'div[3]').text
         lnk=lks.get_property('href')
         lkt=lks.text
-        new_row={'标题':lkt,'时间':elm[1:-1],'链接':lnk}
+        new_row={'标题':lkt,'时间':elm[1:-1],'链接':lnk,'爬取时间':get_time()}
         dts.append(new_row)
 df=pd.DataFrame(dts)
 df.to_sql('notice_data',engine,if_exists='replace',index=True)
