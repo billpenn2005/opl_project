@@ -1,4 +1,4 @@
-# Openlab复试 Q3 看看你的
+# Openlab复试 T3 看看你的
 * ## 环境
   * Anaconda3
   * Python 3.11
